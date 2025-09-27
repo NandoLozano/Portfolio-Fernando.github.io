@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width">
+    <meta name="theme-color" content="#09f">
+    <meta name="description" content="Portfolio de Fernando, Ingeniero informático especializado en Ingeniería de Software">
+    <title>Portfolio de Fernando</title>
+    <link rel="icon" type="image/jpg" href="img/Logo uclm.jpg">
+    <style>
+        :root {
+            --primary-color: #09f;
+            --background-color: #f5f5f5;
+            --text-color: #333;
+            --shadow-color: rgba(0, 0, 0, 0.2); /* Sombra más oscura */
+        }
+
+        /* Fondo animado */
+        body {
+            font-family: 'Inter', system-ui, sans-serif;
+            margin: 0;
+            padding: 0;
+            color: var(--text-color);
+            line-height: 1.6;
+            background: #2f2f2f;
+            min-height: 100vh;
+            position: relative;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Header Section */
+        .hero {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 2rem;
+            padding: 4rem 0;
+        }
+
+        .hero-content {
+            flex: 1;
+        }
+
+        .hero img {
+            border-radius: 1rem;
+            box-shadow: 0 10px 20px var(--shadow-color);
+        }
+
+        /* Navigation */
+        nav {
+            background: white;
+            padding: 1rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px var(--shadow-color);
+        }
+
+        nav a {
+            color: var(--primary-color);
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            display: inline-block;
+        }
+
+        /* Sections */
+        section {
+            background: white;
+            border-radius: 8px;
+            padding: 2rem;
+            margin: 2rem 0;
+            box-shadow: 0 4px 8px var(--shadow-color); /* Sombra más pronunciada */
+        }
+
+        /* Form styles */
+        form {
+            display: grid;
+            gap: 1rem;
+        }
+
+        fieldset {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 1rem;
+        }
+
+        input, select, button {
+            padding: 0.5rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        button {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            cursor: pointer;
+            padding: 0.75rem 1.5rem;
+        }
+
+        /* Modal */
+        dialog {
+            border: none;
+            border-radius: 8px;
+            padding: 2rem;
+            box-shadow: 0 6px 12px var(--shadow-color);
+        }
+    </style>
+</head>
+<body>
+    <main class="container">
+        <!-- Hero Section -->
+        <div class="hero">
+            <div class="hero-content">
+                <h1 style="color: white;font-family:Georgia, 'Times New Roman', Times, serif; font-size: 2.3rem;">PORTFOLIO DE FERNANDO</h1>
+                <p style="color: white;font-size: large;" ><strong>Ingeniero de Software</strong> con pasión por el desarrollo web</p>
+            </div>
+            <img src="img/Foto Fernando.jpg" alt="Foto de Fernando" width="350" height="400">
+        </div>
+        <!-- Navigation -->
+        <nav>
+            <a href="#experiencia">Experiencia</a>
+            <a href="#proyectos">Proyectos</a>
+            <a href="#contacto">Contacto</a>
+            <a href="https://twitch.tv/midudev" target="_blank" rel="noreferrer">Twitch</a>
+        </nav>
+
+        <!-- Experience Section -->
+        <section id="experiencia">
+            <h2>Experiencia</h2>
+            <ul>
+                <li>ESII - Universidad de Castilla-La Mancha</li>
+                <li>Maestranza Aérea</li>
+            </ul>
+        </section>
+
+        <!-- Technologies Section -->
+        <section>
+            <h2>Tecnologías favoritas</h2>
+            <ol>
+                <li>HTML</li>
+                <li>JavaScript</li>
+                <li>CSS</li>
+            </ol>
+        </section>
+
+        <!-- Projects Section -->
+        <section id="proyectos">
+            <h2>Proyectos</h2>
+            <div class="projects-grid">
+                <article>
+                    <h3>Sitio web corporativo</h3>
+                    <p>Desarrollo web corporativo para una empresa</p>
+                    <footer>
+                        <small>Tecnologías: HTML, CSS, JavaScript</small>
+                    </footer>
+                </article>
+                <!-- ...existing projects... -->
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contacto">
+            <h2>Contacto</h2>
+            <form>
+                <fieldset>
+                    <legend>Información personal</legend>
+                    <div>
+                        <label for="name">Nombre:</label>
+                        <input type="text" id="name" placeholder="Fernando">
+                    </div>
+                    <div>
+                        <label for="email">Email:</label>
+                        <input type="email" id="email" placeholder="a@a.es">
+                    </div>
+                </fieldset>
+                
+                <!-- ...existing form fields... -->
+                
+                <button type="submit">Enviar contacto</button>
+            </form>
+        </section>
+
+        <!-- FAQ Section -->
+        <section>
+            <h2>Preguntas frecuentes</h2>
+            <details>
+                <summary>¿Cómo contactar?</summary>
+                <p>Enviando un correo a Fer@fer.com</p>
+            </details>
+        </section>
+
+        <!-- Modal -->
+        <dialog id="modal">
+            <h2>Más información</h2>
+            <p>Es totalmente nativo</p>
+            <button id="cerrar">Cerrar</button>
+        </dialog>
+        <button id="show">Ver más información</button>
+        
+        <section>
+            <h2>Iframe de prueba</h2>
+            <iframe width="100%" height="315" aspect="16:9" src="https://www.youtube.com/embed/CP62eDdOyCM?si=xIveGe8lvsYQr327" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen=""></iframe>
+        </section>
+        
+        <section>
+            <h2>Video de prueba</h2>
+            <video src="sample_960x400_ocean_with_audio.mp4" controls=""></video>
+        </section>
+    </main>
+
+    <script>
+        window.show.addEventListener('click', () => window.modal.showModal())
+        window.cerrar.addEventListener('click', () => window.modal.close())
+    </script>
+
+</body>
+</html>
