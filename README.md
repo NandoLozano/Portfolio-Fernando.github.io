@@ -31,6 +31,7 @@ El script busca Node en PATH o en el runtime local de Codex, construye el proyec
 
 | Comando | Función |
 | --- | --- |
+| `npm start` | Acceso directo a `npm run dev`, con recarga automática al editar. |
 | `npm run dev` | Desarrollo con recarga; no sirve para comprobar la CSP de producción. |
 | `npm run check` | Diagnósticos de Astro y TypeScript. |
 | `npm run build` | Genera las páginas y el archivo opcional de cabeceras `dist/_headers`. |
