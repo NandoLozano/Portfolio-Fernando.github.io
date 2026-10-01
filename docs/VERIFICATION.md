@@ -1,4 +1,44 @@
-# Registro de la primera versión revisable
+# Verificación de las correcciones del portfolio
+
+Fecha: 1 de octubre de 2026. Revisión local sobre `b7d0d58`, que era HEAD y estaba limpio al comenzar. Se leyeron la revisión, instrucciones y decisiones privadas antes de editar; ambos hallazgos seguían presentes. Se conserva `npm start`, el diseño Azul sereno, iconos compactos, las tres muestras y los recursos originales. No se modificaron `.gitignore`, `contexto-codex/`, la CSP, las cabeceras ni los bloqueos de indexación. Sin commit, push ni despliegue.
+
+## Resultados de esta corrección
+
+| Comprobación ejecutada | Resultado |
+| --- | --- |
+| `npm run check` | 18 archivos; 0 errores, 0 avisos y 0 sugerencias. |
+| `npm run build` | 12 páginas estáticas y `_headers`; sin avisos de construcción. |
+| `npm run test:security` | 5 pruebas aprobadas. Conservadas las pruebas de rechazo anteriores; añadida recuperación íntegra del destinatario con `#`, `&`, `/`, `=`, `+` y otros caracteres admitidos, sin query ni fragmento. Validadores de repositorio/demo y rutas locales de captura. |
+| `npm run test:render-security` | 4 variantes: ES/EN × muestra/real. Título, resumen, categoría, rol, stack, decisiones, resultados, base de medición, alt, pie y metadatos adversarios permanecen como texto. Sin scripts ni manejadores inyectados. URL ejecutable omitida, enlace HTTPS escapado y correo íntegro en el HTML real. |
+| `npm test` | 11 pruebas aprobadas en 23,8 s, Edge headless. 40 barridos responsive/axe del sitio normal sin infracciones detectadas. |
+| `npm run test:projects` | Tres construcciones aisladas: colección mixta, solo reales y un único real. Comprobación Astro/TypeScript de los fixtures importados desde los datos. 80 barridos responsive/axe adicionales sin infracciones detectadas. |
+| Auditoría npm en línea | 0 vulnerabilidades conocidas. Se ejecutó directamente el CLI local de npm; `npm run audit` no pudo resolver el ejecutable `npm` en este PATH. La primera petición al registro falló en el entorno restringido; el reintento autorizado completó la consulta. |
+| Inventario de salida | 16 archivos: 12 HTML, CSS, favicon, robots y cabeceras. Sin fixtures, páginas de prueba, referencias a documentos privados, scripts, formularios, iframes ni coincidencias con los patrones de credenciales examinados. |
+
+Se usó Node 24.21.0 y npm local bajo `.tools/`, sin instalar dependencias ni cambiar `package-lock.json`. Los comandos npm se invocaron mediante `node .tools/package/bin/npm-cli.js` con el runtime de Node en PATH. La auditoría utilizó `node .tools/package/bin/npm-cli.js audit --cache .npm-cache`.
+
+## Cobertura de contenido y navegador
+
+- Las muestras actuales mantienen sus textos, stack y rol ilustrativos. Los avisos se derivan de `status`; en colecciones mixtas cada concepto queda identificado individualmente. Los metadatos del inicio y del detalle se comprueban en ambos idiomas, incluida su ausencia de avisos en colecciones solo reales.
+- Fixtures sintéticos separados del producto: real con resultado cualitativo sin repositorio, real con demo/repositorio/métrica/captura y real con opcionales vacíos y enlaces rechazados. No representan trabajo de Fernando. Se prueban campos ausentes, cadenas en blanco, listas vacías, captura sin pie, URLs descartadas y secciones sin contenido omitidas.
+- Acceso desde iconos, URLs directas, recarga, vuelta al mosaico, idioma equivalente, historial atrás/adelante y enlace al siguiente caso. Un único proyecto no se enlaza a sí mismo como siguiente. Recorrido de inicio, detalle, idioma y regreso con JavaScript desactivado.
+- Anchuras 320, 390, 768, 1024 y 1440 px, tablet vertical/horizontal, sin desplazamiento horizontal. Axe con reglas WCAG 2 A/AA, 2.1 AA y 2.2 AA: 120 barridos en total. Enlaces de evidencias con foco visible, orden de teclado y altura mínima de 44 px. La suite normal conserva movimiento reducido y reflujo a 720 px.
+- Capturas cargadas desde el propio origen bajo la CSP conservada; texto alternativo localizado, dimensiones, pie opcional y controles externos protegidos. Los enlaces sintéticos a `example.com` se inspeccionan sin abrir destinos externos.
+- Inspección visual de inicio ES en escritorio/móvil, inicio EN en tablet, detalle sintético con demo en móvil/tablet horizontal y detalle mínimo EN a 320 px: sin recortes ni solapamientos observados. Artefactos en `artifacts/home-*.png`, `artifacts/case-*.png`, `artifacts/fixture-*.png`; informe normal en `artifacts/browser-results.json`.
+
+Los tests de contenido y escape escriben únicamente en directorios exclusivos `.tools/projects-*` y `.tools/render-security-*`. No generan archivos transitorios en `src/pages/` ni alteran la construcción normal. Las copias se conservan ignoradas para diagnóstico. Solo `dist/` normal es la versión local de entrega.
+
+## Limitaciones observadas
+
+La CSP meta generada por Astro combina `script-src 'none'` con hashes automáticos y Edge avisa de que ignora `'none'` en esa directiva. El aviso ya está en la construcción normal y no procede de los nuevos datos. La cabecera HTTP comprobada contiene exactamente `script-src 'none'`, además de `frame-ancestors 'none'`, y no hay scripts en el HTML. Se mantiene la configuración solicitada; no se afirma que la meta aislada tenga el mismo bloqueo que la cabecera. El test de fixtures registra exclusivamente este aviso conocido y falla ante otros errores de consola o página. Pendiente revisar la generación de la meta en Astro y verificar las cabeceras en el alojamiento elegido.
+
+Pruebas emuladas en Edge, sin Safari/iOS ni dispositivos físicos, lector de pantalla o ampliación real de texto. No equivalen a certificación de accesibilidad. Observación local sin limitar red/CPU: DOMContentLoaded ≈19,9 ms y 10.587 bytes transferidos; no es una medición de producción. La verdad de los resultados y la autorización de capturas requieren revisión editorial; los validadores de enlaces no certifican disponibilidad ni confiabilidad de los sitios de destino.
+
+Siguen pendientes contenido/contactos definitivos, dominio, alojamiento y seguridad pública. Se conserva `noindex`; no se ha publicado nada.
+
+---
+
+# Registro histórico de la primera versión revisable
 
 Fecha: 1 de octubre de 2026. Verificación local sobre la construcción estática; sin publicación. Entorno: Windows, Node 24.21.0, npm 12.2.0, Microsoft Edge con Playwright 1.63.0. Capturas inspeccionadas visualmente después de generar las páginas.
 

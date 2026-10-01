@@ -15,6 +15,12 @@ Revisión local: 1 de octubre de 2026. Alcance: sitio estático ES/EN, herramien
 
 ## Hallazgos y resolución
 
+Corrección del 1 de octubre de 2026: el destinatario de correo se valida antes de codificar por separado sus partes, conservando `@`. Pruebas de regresión verifican `#`, `&`, `/`, `=`, `+` y los demás caracteres admitidos, junto con los rechazos anteriores de cabeceras, parámetros y codificación previa. Se comprueba también el enlace renderizado por Astro. Referencia: [RFC 6068 §2](https://www.rfc-editor.org/rfc/rfc6068.html#section-2).
+
+Los nuevos enlaces de proyectos solo aceptan HTTPS explícito con dominio, sin credenciales, controles ni puertos alternativos. Las capturas solo aceptan rutas locales de imágenes raster bajo `/images/projects/`, sin traversal, query, fragmentos o URL externa. Datos, resultados, alt y pies conservan el escape de Astro; los enlaces de evidencia usan `noopener noreferrer`. Un campo inválido se omite y no fuerza a relajar la CSP. Estas comprobaciones no acreditan la disponibilidad o seguridad del sitio enlazado.
+
+**Limitación detectada al ampliar la observación de consola:** Astro genera hashes automáticos junto a `'none'` en la directiva `script-src` de la CSP meta. Edge ignora ese `'none'` y emite un aviso; la meta permite esos hashes y no debe describirse como un bloqueo absoluto de scripts. La cabecera HTTP sigue imponiendo `script-src 'none'` y `frame-ancestors 'none'`, comprobado en las vistas previas. No hay scripts en las páginas. Se han conservado `astro.config.mjs` y `security.config.mjs` sin cambios, conforme al alcance solicitado. Pendiente revisar la generación de la meta de Astro; antes de publicar debe verificarse que el alojamiento realmente aplique la cabecera, sin depender exclusivamente de la meta. Las pruebas de fixtures registran este aviso exacto; otros errores de consola provocan fallo.
+
 | Hallazgo | Resolución |
 | --- | --- |
 | TypeScript 7 no compatible con `astro check` actual | Fijado TypeScript 6.0.3; comprobación sin errores ni avisos. |

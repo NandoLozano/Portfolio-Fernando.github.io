@@ -13,7 +13,8 @@ const t = copy[lang];
       <a class="project-link group" href={projectPath(lang, content.slug)}>
         <span class={`app-icon ${project.tone}`}><Icon name={project.icon} /><span class="icon-corner" aria-hidden="true">0{index + 1}</span></span>
         <span class="project-title">{content.title}</span>
-        <span class="project-category">{content.category}</span>
+        {content.category?.trim() && <span class="project-category">{content.category}</span>}
+        {project.status === 'sample' && <span class="project-sample">{t.concept}</span>}
         <span class="project-action">{t.openCase}<Icon name="diagonal" /></span>
       </a>
     </li>;

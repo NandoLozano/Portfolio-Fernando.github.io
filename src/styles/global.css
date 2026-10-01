@@ -154,6 +154,13 @@ figcaption { color: var(--color-muted); font-size: 10px; }
 .results-section li { display: flex; align-items: flex-start; gap: 12px; margin-top: 12px; font-size: 14px; color: var(--color-muted); }
 .results-section li svg { width: 17px; height: 17px; color: var(--color-mist); margin-top: 4px; }
 .evidence-section { margin-top: 32px; }
+.project-sample { color: var(--color-sand); font-size: 10px; margin-top: 4px; }
+.result-value { display: block; color: var(--color-paper); font-size: 22px; }
+.evidence-links a { min-height: 44px; }
+.project-screenshot { margin-top: 24px; }
+.project-screenshot img { display: block; width: 100%; height: auto; border: 1px solid var(--line); border-radius: 7px; }
+.project-screenshot figcaption { margin-top: 8px; font-size: 12px; }
+.case-content, .project-link, .case-navigation { overflow-wrap: anywhere; min-width: 0; }
 .case-navigation { display: flex; justify-content: space-between; align-items: center; gap: 20px; padding: 28px 0 36px; }
 .next-case { display: flex; align-items: center; gap: 23px; padding: 8px 0 8px 16px; font-size: 14px; }
 .next-case small { display: block; font-size: 10px; color: var(--color-muted); }

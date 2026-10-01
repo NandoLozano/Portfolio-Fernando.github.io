@@ -1,0 +1,109 @@
+name: Portfolio CI
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: portfolio-ci-${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+env:
+  CI: 'true'
+  ASTRO_TELEMETRY_DISABLED: '1'
+  PLAYWRIGHT_CHANNEL: chromium
+
+jobs:
+  verify:
+    name: Build and security
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.1.0
+        with:
+          persist-credentials: false
+
+      - name: Node.js
+        uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6.5.0
+        with:
+          node-version: '24'
+          cache: npm
+
+      - name: Install locked dependencies without lifecycle scripts
+        run: npm ci --ignore-scripts --no-audit --no-fund
+
+      - name: Audit all dependencies, including build tools
+        run: npm audit --audit-level=high
+
+      - name: Astro and TypeScript
+        run: npm run check
+
+      - name: Link security regressions
+        run: npm run test:security
+
+      - name: Template escaping
+        run: npm run test:render-security
+
+      - name: Production build
+        run: npm run build
+
+  browser:
+    name: Browser and accessibility
+    needs: verify
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - name: Checkout
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.1.0
+        with:
+          persist-credentials: false
+
+      - name: Node.js
+        uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6.5.0
+        with:
+          node-version: '24'
+          cache: npm
+
+      - name: Install locked dependencies without lifecycle scripts
+        run: npm ci --ignore-scripts --no-audit --no-fund
+
+      - name: Install the project's Chromium and Linux dependencies
+        run: ./node_modules/.bin/playwright install --with-deps chromium
+
+      - name: Build the normal site
+        run: npm run build
+
+      - name: Navigation, responsive layout and accessibility
+        run: npm test -- --workers=1 --forbid-only
+
+      - name: Real-project content with isolated fixtures
+        run: npm run test:projects
+
+      - name: Save test reports and screenshots
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
+        with:
+          name: test-evidence-${{ github.run_id }}-${{ github.run_attempt }}
+          path: |
+            artifacts/*.json
+            artifacts/*.png
+            test-results/
+          if-no-files-found: ignore
+          include-hidden-files: false
+          retention-days: 7
+
+      - name: Save the verified static build
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
+        with:
+          name: portfolio-dist-${{ github.run_id }}-${{ github.run_attempt }}
+          path: dist/
+          if-no-files-found: error
+          include-hidden-files: false
+          retention-days: 7

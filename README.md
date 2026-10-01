@@ -37,8 +37,9 @@ El script busca Node en PATH o en el runtime local de Codex, construye el proyec
 | `npm run build` | Genera las páginas y el archivo opcional de cabeceras `dist/_headers`. |
 | `npm run preview` | Sirve la construcción en el puerto 4321 con cabeceras de seguridad. |
 | `npm test` | Navegación, metadatos, responsive, axe, teclado, capturas y respuestas HTTP en Edge headless. |
-| `npm run test:security` | Valida destinos y rechaza protocolos, dominios y cabeceras de correo no permitidos. |
-| `npm run test:render-security` | Prueba controlada de escape en los componentes reales, en una construcción aislada. |
+| `npm run test:security` | Valida contactos, enlaces de proyectos, capturas y codificación íntegra del destinatario de correo. |
+| `npm run test:render-security` | Escape de texto, resultados, capturas, metadatos y correo en componentes ES/EN de muestra y reales, en una copia aislada. |
+| `npm run test:projects` | Fixtures tipados: muestras + reales, solo reales y un único proyecto; rutas, opcionales, metadatos, teclado, capturas, accesibilidad y navegación sin JS. |
 | `npm run audit` | Auditoría actual de dependencias directas y transitivas. |
 
 Las pruebas de navegador usan Edge instalado. Para Chromium: `npx playwright install chromium` y `PLAYWRIGHT_CHANNEL=chromium npm test` (en PowerShell: `$env:PLAYWRIGHT_CHANNEL='chromium'; npm test`). El servidor de prueba arranca y se detiene dentro del proceso; reutiliza una vista previa local si ya está activa. Las capturas y el informe se guardan en `artifacts/`, ignorado por Git.
@@ -54,11 +55,44 @@ Las pruebas de navegador usan Edge instalado. Para Chromium: `npx playwright ins
 | `src/components/` | Cabecera, iconos, mosaico, contacto, inicio y caso reutilizable. |
 | `security.config.mjs` | Cabeceras compartidas entre vista previa y salida para alojamiento estático. |
 
-Para añadir otro caso, incorpora un objeto `Project` en el array: `id` único, un icono admitido, tono y ambos idiomas con `slug` propio. Las rutas se generan automáticamente y el selector mantiene el proyecto equivalente. No hay un máximo de tres casos. Los nombres pueden ocupar varias líneas.
+### Añadir proyectos únicamente mediante datos
 
-Los tres casos actuales son **conceptos de muestra**, incluido el stack y el rol. No se afirman métricas, experiencia ni resultados reales. El texto «Sobre mí» está marcado como provisional; la trayectoria no se ha reutilizado sin validación. Para introducir casos reales hay que ampliar el tipo `sample`, revisar avisos y estados en los componentes y aportar evidencias verificadas; no basta con ocultar las etiquetas.
+Añade un objeto `Project` al array de `src/data/projects.ts`; no hay que editar componentes, rutas ni traducciones de interfaz. El orden del array determina el mosaico y el siguiente caso. No hay un máximo de tres; si solo hay uno, se omite «Siguiente caso».
+
+1. Asigna un `id` único, `icon` (`workflow`, `window` o `database`), `tone` (`blue`, `lavender` o `sand`) y `status`: `sample` para conceptos o `real` para trabajo realizado y confirmado.
+2. Completa `content.es` y `content.en`, cada uno con `slug`, `title` y `summary`. Usa slugs únicos por idioma, con letras minúsculas ASCII, números y guiones, sin barras ni parámetros. El mismo objeto relaciona las traducciones aunque sus slugs sean distintos.
+3. Añade solo los campos que tengan contenido confirmado, según la tabla. Para omitirlos, elimina la propiedad; también se omiten cadenas en blanco y listas vacías. No hace falta un repositorio público ni una métrica para mostrar un caso real.
+4. Si hay capturas, coloca los archivos autorizados en `public/images/projects/` y referencia sus rutas desde los datos. No hace falta modificar la CSP ni los componentes.
+5. Ejecuta `npm run check`, `npm run build`, `npm run test:security`, `npm run test:render-security`, `npm run test:projects` y `npm test`. Revisa las traducciones, las nuevas rutas y los destinos externos reales antes de publicar.
+
+| Campo opcional | Datos y comportamiento |
+| --- | --- |
+| `stack` | Lista compartida de tecnologías. Etiquetas ilustrativas solo en muestras. |
+| `repository`, `demo` | URL HTTPS completa compartida. Se rechazan protocolos alternativos, credenciales, controles, puertos no estándar y hosts sin dominio. Se permiten rutas, query y fragmento; no se incrustan servicios externos. Un enlace rechazado se omite. |
+| `content.{idioma}.category`, `role`, `problem`, `solution` | Texto plano localizado; sección o etiqueta ausente si está vacío. |
+| `flow` | Lista de pasos en texto plano; leyenda conceptual solo para muestras. |
+| `decisions` | Lista de objetos `{ title, text }`. |
+| `validation` | Lista de comprobaciones pendientes, bajo «Qué habría que validar»; no son resultados alcanzados. |
+| `results` | Resultados cualitativos `{ kind: 'qualitative', text }` o métricas `{ kind: 'metric', value, text, basis, confirmed: true }`. `basis` explica la fuente, el período o método de medición. No se muestra una métrica sin confirmación, valor, explicación y base. La veracidad requiere revisión editorial. |
+| `screenshots` | Lista localizada de `{ src, alt, width, height, caption? }`. `alt` traducido no vacío, dimensiones enteras positivas y pie opcional. Rutas locales `/images/projects/...` con nombres alfanuméricos, guiones o guiones bajos y extensión `png`, `jpg`, `jpeg`, `webp` o `avif`; sin URLs remotas, SVG, query ni recorridos `..`. |
+
+Los resultados, pies y textos alternativos se escapan como texto, igual que el resto del contenido. Si no hay enlaces válidos ni capturas válidas, desaparece «Evidencias y enlaces». Los archivos de captura deben existir y sus dimensiones deben corresponder al recurso; revisa también sus metadatos y permisos de publicación.
+
+Los avisos del inicio y sus metadatos indican muestras solo si existe algún proyecto `sample`; en una colección mixta cada icono de muestra lleva su propia etiqueta. Los casos `real` usan etiquetas de contribución y tecnologías, sin avisos ni metadatos de concepto. `noindex` permanece incluso si todos los proyectos son reales.
+
+Los tres casos actuales siguen siendo **conceptos de muestra**, incluido el stack y el rol. No se han incorporado proyectos profesionales, contactos ni métricas inventadas. «Sobre mí» continúa marcado como provisional y la trayectoria pendiente de validación.
+
+Los ejemplos ejecutables de casos reales están exclusivamente en `tests/fixtures/projects.ts`: un caso cualitativo sin repositorio, otro con demo/repositorio/captura/métrica sintética y otro sin campos opcionales. `test:projects` importa esos datos solo en copias temporales bajo `.tools/`; comprueba también sus tipos. No altera `src/`, `public/` ni `dist/` normales. `test:render-security` usa el mismo aislamiento. Esas copias y las capturas de `artifacts/` están ignoradas y quedan disponibles para diagnóstico; no deben publicarse.
 
 Los contactos solo se convierten en enlaces cuando se facilitan valores válidos: URL HTTPS de perfil de GitHub/LinkedIn y correo sin `mailto:` ni parámetros. Las acciones ausentes no son botones falsos. Las fuentes son del sistema y los iconos son SVG propios; no se solicita ningún recurso externo.
+
+El correo se valida antes de codificar cada parte, conservando el separador `@`. Así se mantienen íntegros caracteres admitidos como `#`, `&`, `/`, `=` y `+`, sin convertirlos en fragmentos ni cabeceras. Se siguen rechazando porcentajes pre-codificados, parámetros y saltos de línea. Véase [RFC 6068, sección 2](https://www.rfc-editor.org/rfc/rfc6068.html#section-2).
+
+## Verificación local de esta revisión
+
+1 de octubre de 2026: tipos sin errores/avisos; construcción normal de 12 páginas; 5 pruebas de enlaces; escape ES/EN en muestras y reales; 11 pruebas de navegador aprobadas. Los fixtures pasan las tres colecciones y 80 barridos responsive/axe, además de los 40 del sitio normal, entre 320 y 1440 px. Auditoría en línea de npm: 0 vulnerabilidades conocidas. Resultados, capturas y alcance en [docs/VERIFICATION.md](docs/VERIFICATION.md).
+
+Limitaciones: emulación en Edge, sin dispositivos físicos ni Safari/iOS; no acredita zoom real de texto ni una certificación de accesibilidad. Astro genera un aviso previo en la CSP meta al combinar `'none'` con hashes; la cabecera HTTP conserva `script-src 'none'`, comprobado localmente. La configuración de seguridad no se ha cambiado: véase [docs/SECURITY.md](docs/SECURITY.md). Los destinos sintéticos externos no se visitan; la disponibilidad de repositorios/demos definitivos y las cabeceras públicas siguen pendientes.
 
 ### Rutas
 

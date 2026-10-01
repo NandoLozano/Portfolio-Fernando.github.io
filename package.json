@@ -15,6 +15,7 @@
     "test": "playwright test",
     "test:security": "node --experimental-strip-types --test tests/links.test.ts",
     "test:render-security": "node tests/render-security.mjs",
+    "test:projects": "node tests/project-content.mjs",
     "audit": "npm audit"
   },
   "devDependencies": {

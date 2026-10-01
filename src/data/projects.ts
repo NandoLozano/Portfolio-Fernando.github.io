@@ -1,18 +1,27 @@
 import type { Language } from '../lib/i18n';
 export type ProjectIcon = 'workflow' | 'window' | 'database';
+export type ProjectResult =
+  | { kind: 'qualitative'; text: string }
+  | { kind: 'metric'; value: string; text: string; basis: string; confirmed: true };
+export interface ProjectScreenshot {
+  src: string; alt: string; width: number; height: number; caption?: string;
+}
 export interface ProjectTranslation {
-  slug: string; title: string; category: string; summary: string;
-  problem: string; solution: string; role: string;
-  decisions: { title: string; text: string }[];
-  flow: [string, string, string]; validation: string[];
+  slug: string; title: string; category?: string; summary: string;
+  problem?: string; solution?: string; role?: string;
+  decisions?: { title: string; text: string }[];
+  flow?: string[]; validation?: string[];
+  results?: ProjectResult[];
+  screenshots?: ProjectScreenshot[];
 }
 export interface Project {
-  id: string; icon: ProjectIcon; tone: 'blue' | 'lavender' | 'sand'; sample: true;
-  stack: string[]; content: Record<Language, ProjectTranslation>;
+  id: string; icon: ProjectIcon; tone: 'blue' | 'lavender' | 'sand'; status: 'sample' | 'real';
+  stack?: string[]; repository?: string; demo?: string;
+  content: Record<Language, ProjectTranslation>;
 }
 export const projects: Project[] = [
   {
-    id: 'automation', icon: 'workflow', tone: 'blue', sample: true, stack: ['Python', 'FastAPI', 'SQLite'],
+    id: 'automation', icon: 'workflow', tone: 'blue', status: 'sample', stack: ['Python', 'FastAPI', 'SQLite'],
     content: {
       es: {
         slug: 'automatizacion', title: 'Automatización', category: 'Flujos de trabajo',
@@ -43,7 +52,7 @@ export const projects: Project[] = [
     },
   },
   {
-    id: 'web-product', icon: 'window', tone: 'lavender', sample: true, stack: ['Astro', 'TypeScript', 'Tailwind CSS'],
+    id: 'web-product', icon: 'window', tone: 'lavender', status: 'sample', stack: ['Astro', 'TypeScript', 'Tailwind CSS'],
     content: {
       es: {
         slug: 'producto-web', title: 'Producto web', category: 'De idea a producto',
@@ -74,7 +83,7 @@ export const projects: Project[] = [
     },
   },
   {
-    id: 'backend', icon: 'database', tone: 'sand', sample: true, stack: ['TypeScript', 'Node.js', 'PostgreSQL'],
+    id: 'backend', icon: 'database', tone: 'sand', status: 'sample', stack: ['TypeScript', 'Node.js', 'PostgreSQL'],
     content: {
       es: {
         slug: 'backend', title: 'Backend', category: 'Sistemas y datos',
