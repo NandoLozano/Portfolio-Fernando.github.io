@@ -1,0 +1,21 @@
+---
+import { projects } from '../data/projects';
+import { copy, projectPath, type Language } from '../lib/i18n';
+import Icon from './Icon.astro';
+interface Props { lang: Language; }
+const { lang } = Astro.props;
+const t = copy[lang];
+---
+<ul class="project-grid">
+  {projects.map((project, index) => {
+    const content = project.content[lang];
+    return <li>
+      <a class="project-link group" href={projectPath(lang, content.slug)}>
+        <span class={`app-icon ${project.tone}`}><Icon name={project.icon} /><span class="icon-corner" aria-hidden="true">0{index + 1}</span></span>
+        <span class="project-title">{content.title}</span>
+        <span class="project-category">{content.category}</span>
+        <span class="project-action">{t.openCase}<Icon name="diagonal" /></span>
+      </a>
+    </li>;
+  })}
+</ul>

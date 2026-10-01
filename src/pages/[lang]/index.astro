@@ -1,0 +1,7 @@
+---
+import Home from '../../components/Home.astro';
+import { languages, type Language } from '../../lib/i18n';
+export function getStaticPaths() { return languages.map(lang => ({ params: { lang }, props: { lang } })); }
+interface Props { lang: Language; }
+---
+<Home lang={Astro.props.lang} />

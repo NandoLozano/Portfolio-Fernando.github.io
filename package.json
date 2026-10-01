@@ -1,0 +1,28 @@
+{
+  "name": "fernando-portfolio",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "scripts": {
+    "dev": "node scripts/astro.mjs dev --host 127.0.0.1",
+    "check": "node scripts/astro.mjs check",
+    "build": "node scripts/astro.mjs build && node scripts/write-headers.mjs",
+    "preview": "node scripts/astro.mjs preview --host 127.0.0.1 --port 4321",
+    "test": "playwright test",
+    "test:security": "node --experimental-strip-types --test tests/links.test.ts",
+    "test:render-security": "node tests/render-security.mjs",
+    "audit": "npm audit"
+  },
+  "devDependencies": {
+    "@astrojs/check": "0.9.10",
+    "@axe-core/playwright": "4.13.0",
+    "@playwright/test": "1.63.0",
+    "@tailwindcss/vite": "4.3.3",
+    "astro": "7.3.5",
+    "tailwindcss": "4.3.3",
+    "typescript": "6.0.3"
+  }
+}

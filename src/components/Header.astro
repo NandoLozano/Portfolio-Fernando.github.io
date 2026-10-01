@@ -1,0 +1,23 @@
+---
+import { copy, homePath, type Language } from '../lib/i18n';
+import ContactLinks from './ContactLinks.astro';
+interface Props { lang: Language; alternates: Record<Language, string>; }
+const { lang, alternates } = Astro.props;
+const t = copy[lang];
+---
+<header class="site-header wrapper" id="top">
+  <a class="wordmark" href={homePath(lang)} aria-label={`Fernando · ${t.home}`}>f<span>.</span></a>
+  <nav class="main-nav" aria-label={t.navigation}>
+    <a href={`${homePath(lang)}#projects`}>{t.projects}</a>
+    <a href={`${homePath(lang)}#about`}>{t.about}</a>
+    <a href={`${homePath(lang)}#contact`}>{t.contact}</a>
+  </nav>
+  <div class="header-tools">
+    <ContactLinks lang={lang} compact />
+    <nav class="language-switch" aria-label={t.language}>
+      <a href={alternates.es} lang="es" hreflang="es" aria-label="Español" aria-current={lang === 'es' ? 'page' : undefined}>ES</a>
+      <span aria-hidden="true">/</span>
+      <a href={alternates.en} lang="en" hreflang="en" aria-label="English" aria-current={lang === 'en' ? 'page' : undefined}>EN</a>
+    </nav>
+  </div>
+</header>

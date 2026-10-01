@@ -1,0 +1,13 @@
+---
+import ProjectDetail from '../../../components/ProjectDetail.astro';
+import { projects, type Project } from '../../../data/projects';
+import { languages, type Language } from '../../../lib/i18n';
+export function getStaticPaths() {
+  return languages.flatMap(lang => projects.map(project => ({
+    params: { lang, section: lang === 'es' ? 'proyectos' : 'projects', slug: project.content[lang].slug },
+    props: { lang, project },
+  })));
+}
+interface Props { lang: Language; project: Project; }
+---
+<ProjectDetail lang={Astro.props.lang} project={Astro.props.project} />

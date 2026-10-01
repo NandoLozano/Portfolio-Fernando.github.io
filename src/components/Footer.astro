@@ -1,0 +1,10 @@
+---
+import { copy, type Language } from '../lib/i18n';
+import Icon from './Icon.astro';
+interface Props { lang: Language; }
+const t = copy[Astro.props.lang];
+---
+<footer class="site-footer wrapper">
+  <p><span class="footer-name">Fernando<span class="text-sand">.</span></span><span class="footer-note">{t.footer}</span></p>
+  <a href="#top">{t.top}<Icon name="up" /></a>
+</footer>
